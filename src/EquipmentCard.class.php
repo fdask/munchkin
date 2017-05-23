@@ -1,4 +1,3 @@
-#!/usr/bin/php
 <?php
 namespace fdask\Munchkin;
 
@@ -77,6 +76,7 @@ class EquipmentCard extends TreasureCard {
 		$ret .= " Bonus: " . $this->getBonus();
 		$ret .= " Size: " . $this->getSize();
 		$ret .= " Location: " . $this->getLocation();
+		$ret .= " Equipped: " . ($this->getEquipped() ? 'true' : 'false');
 
 		return $ret;
 	}
@@ -341,7 +341,7 @@ class EquipmentCard extends TreasureCard {
 	* @return boolean new state of the equipped property
 	**/
 	public function toggleEquipped() {
-		$this->equipped = !is_null($equipped) ? !$this->equipped : true;
+		$this->equipped = !is_null($this->equipped) ? !$this->equipped : true;
 
 		return $this->equipped;	
 	}

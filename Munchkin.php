@@ -1,6 +1,12 @@
 #!/usr/bin/php
 <?php
 // this is the main gameplay loop for Munchkin!
+require 'vendor/autoload.php';
+
+use fdask\Munchkin\Card;
+use fdask\Munchkin\Deck;
+use fdask\Munchkin\Game;
+use fdask\Munchkin\Player;
 
 // initialize our four decks.
 $doorDeck = new Deck();
@@ -20,7 +26,7 @@ $treasureDeckDiscard->setState(Card::STATE_FACEUP);
 $treasureDeckDiscard->setName("Treasure Deck Discard Pile");
 
 // add the appropriate cards to our decks!
-include 'OriginalDeck.inc.php';
+include 'src/OriginalDeck.inc.php';
 
 // lets test:
 $ddCards = $doorDeck->getCards();

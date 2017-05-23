@@ -1,4 +1,3 @@
-#!/usr/bin/php
 <?php
 namespace fdask\Munchkin;
 
@@ -638,7 +637,40 @@ class Game {
 							$card = $this->findCard($player, Player::DECK_PLAY, trim($cbits[1]));
 
 							if ($card) {
+								if (get_class($card) == 'fdask\Munchkin\EquipmentCard') {	
+									// if we are EQUIPPING the card, lets check restrictions
+									if (!$card->getEquipped()) {
+										$gender = $this->players[$player]->getGender();
+										$genderRestrictions = $card->getGenderRestrictions();
+										$classes = $this->players[$player]->getClasses();
+										$classRestrictions = $card->getClassRestrictions();
+										$classIntersect = array_intersect($classes, $classRestrictions);
+										$races = $this->players[$player]->getRaces();
+										$raceRestrictions = $card->getRaceRestrictions();
+										$raceIntersect = array_intersect($races, $raceRestrictions);
+										$cardLocation = $card->getLocation();
 
+										if (in_array($gender, $genderRestrictions)) {
+											echo "Player of gender $gender not allowed to equip " . $card->getName() . "\n";
+										} else if (!empty($classIntersect)) {
+											echo "Class " . implode(",", $classIntersect) . " not allowed to equip " . $card->getName() . "\n";
+										} else if (!empty($raceIntersect)) {
+											echo "Race " . implode(",", $raceIntersect) . " not allowed to equip " . $card->getName() . "\n";
+										} else if (!$this->players[$player]->canEquipLocation($cardLocation)) {
+											echo "Another item is already equipped in that slot! ($cardLocation)\n";
+										} else {
+											echo "Equipping " . $card->getName() . "\n";
+
+											$card->toggleEquipped();
+										}	
+									} else {
+										$card->toggleEquipped();
+									}
+								} else {
+									echo "Can't equip a non equipment card!\n";
+								}
+
+								$this->players[$player]->getCardPlay()->addCard($card);
 							}
 						}	
 					} else if (trim($cbits[0]) == "dc") {

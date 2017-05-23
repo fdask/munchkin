@@ -1,4 +1,3 @@
-#!/usr/bin/php
 <?php
 namespace fdask\Munchkin;
 
@@ -281,9 +280,11 @@ class Player {
 	/**
 	* returns the players current classes if any!
 	*
-	* @return false|array
+	* @return array
 	**/
 	public function getClasses() {
+		$ret = array();
+
 		$cardPlay = $this->cardPlay;
 
 		if (!empty($cardPlay)) {
@@ -296,13 +297,9 @@ class Player {
 					$ret[] = $card;
 				}
 			}
-
-			if (!empty($ret)) {
-				return $ret;
-			}
 		}
 
-		return false;	
+		return $ret;
 	}
 
 	/**
@@ -331,9 +328,10 @@ class Player {
 	/**
 	* returns the players current races if any
 	*
-	* @return false|array
+	* @return array
 	**/
 	public function getRaces() {
+		$ret = array();
 		$cardPlay = $this->cardPlay;
 
 		if (!empty($cardPlay)) {
@@ -346,13 +344,64 @@ class Player {
 					$ret[] = $card;
 				}
 			}
+		}
 
-			if (!empty($ret)) {
-				return $ret;
+		return $ret;	
+	}
+
+	/**
+	* returns all the places a user currently has occupied by equipment!
+	*
+	* @return array
+	**/
+	public function getEquippedLocations() {
+		$ret = array();
+
+		$cardPlay = $this->cardPlay;
+
+		if (!empty($cardPlay)) {
+			foreach ($cardPlay as $card) {
+				$cardType = get_class($card);
+
+				if ($cardType == 'fdask\Munchkin\EquipmentCard' && $card->getEquipped()) {
+					$ret[] = $card->getLocation();	
+				}
 			}
 		}
 
-		return false;	
+		return $ret;
+	}
+
+	/**
+	* checks to see if there will be a conflict if the user equips the given item
+	*
+	* @param string $location
+	* @return boolean
+	**/
+	public function canEquipLocation($location) {
+		$equippedLocations = $this->getEquippedLocations();
+
+		if ($location == EquipmentCard::LOCATION_ONEHAND || $location == EquipmentCard::LOCATION_TWOHANDS) {
+			$array_count = array_count_values($equippedLocations);
+
+			if ($array_count[EquipmentCard::LOCATION_ONEHAND] == 2) {
+				return false;
+			} 
+
+			if ($location == EquipmentCard::LOCATION_ONEHAND && in_array(EquipmentCard::LOCATION_TWOHANDS, $equippedLocations)) {
+				return false;
+			}
+		
+			if ($location == EquipmentCard::LOCATION_TWOHANDS && in_array(EquipmentCard::LOCATION_ONEHAND, $equippedLocations)) {
+				return false;
+			}
+		} else {
+			if (in_array($location, $equippedLocations)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**

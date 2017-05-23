@@ -1,4 +1,3 @@
-#!/usr/bin/php
 <?php
 namespace fdask\Munchkin;
 
@@ -237,7 +236,7 @@ class Deck implements \Iterator {
 		$ret = array();
 
 		foreach ($this->cards as $card) {
-			if (strpos(strtolower($card->getGetName()), strtolower($partial)) === 0) {
+			if (strpos(strtolower($card->getName()), strtolower($partial)) === 0) {
 				$ret[] = $card;
 			}
 		}
