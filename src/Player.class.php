@@ -379,25 +379,27 @@ class Player {
 	* @return boolean
 	**/
 	public function canEquipLocation($location) {
-		$equippedLocations = $this->getEquippedLocations();
+		if ($location != EquipmentCard::LOCATION_NONE) {
+			$equippedLocations = $this->getEquippedLocations();
 
-		if ($location == EquipmentCard::LOCATION_ONEHAND || $location == EquipmentCard::LOCATION_TWOHANDS) {
-			$array_count = array_count_values($equippedLocations);
+			if ($location == EquipmentCard::LOCATION_ONEHAND || $location == EquipmentCard::LOCATION_TWOHANDS) {
+				$array_count = array_count_values($equippedLocations);
 
-			if ($array_count[EquipmentCard::LOCATION_ONEHAND] == 2) {
-				return false;
-			} 
+				if (isset($array_count[EquipmentCard::LOCATION_ONEHAND]) && $array_count[EquipmentCard::LOCATION_ONEHAND] == 2) {
+					return false;
+				} 
 
-			if ($location == EquipmentCard::LOCATION_ONEHAND && in_array(EquipmentCard::LOCATION_TWOHANDS, $equippedLocations)) {
-				return false;
-			}
-		
-			if ($location == EquipmentCard::LOCATION_TWOHANDS && in_array(EquipmentCard::LOCATION_ONEHAND, $equippedLocations)) {
-				return false;
-			}
-		} else {
-			if (in_array($location, $equippedLocations)) {
-				return false;
+				if ($location == EquipmentCard::LOCATION_ONEHAND && in_array(EquipmentCard::LOCATION_TWOHANDS, $equippedLocations)) {
+					return false;
+				}
+			
+				if ($location == EquipmentCard::LOCATION_TWOHANDS && in_array(EquipmentCard::LOCATION_ONEHAND, $equippedLocations)) {
+					return false;
+				}
+			} else {
+				if (in_array($location, $equippedLocations)) {
+					return false;
+				}
 			}
 		}
 

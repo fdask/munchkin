@@ -756,6 +756,12 @@ class Game {
 
 							if ($everyoneReady) {
 								// advance the game to actual gameplay!!
+								echo "EVERYONE IS READY!  Advancing game to regular turns!\n";
+								echo "Player " . ($this->getTurn() + 1) . " is up first!\n";
+
+								$this->setState(self::STATE_REGULAR);
+
+								echo $this->players[$this->getTurn()];
 							}
 						} else {
 							// lets assume the player is ending their turn!  or going to the next phase, anyway.

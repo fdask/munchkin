@@ -88,6 +88,26 @@ echo $game->getPlayerOptions(2);
 while (1) {
 	$input = readline("MOVE? ");
 
+	if (trim($input) == "dump") {
+		file_put_contents("GAME_DUMP", serialize($game));
+
+		echo "Game dumped!\n";
+
+		continue;
+	} else if (trim($input) == "load") {
+		if (file_exists("GAME_DUMP")) {
+			$game = unserialize(file_get_contents("GAME_DUMP"));
+
+			echo "Game loaded!\n";
+
+			echo $game;
+		} else {
+			echo "Game file 'GAME_DUMP' not found!\n";
+		}
+
+		continue;
+	}
+
 	$game->getMove($input);
 
 	readline_add_history($input);

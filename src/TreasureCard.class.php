@@ -16,6 +16,19 @@ abstract class TreasureCard extends Card {
 	}
 
 	/**
+	* gets the string representation of the card
+	*
+	* @return string
+	**/
+	public function __toString() {
+		$ret = parent::__toString();
+
+		$ret .= " GV: " . $this->getGoldValue();
+
+		return $ret;
+	}
+
+	/**
 	* sets the goldValue property
 	*
 	* @param integer $value
